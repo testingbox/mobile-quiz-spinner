@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智能手機知多少？</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    text-align: center;
+    padding: 20px;
+    background: #f0f4f8;
+  }
+  #info {
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #555;
+  }
+  #wheel-container {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    margin: 0 auto;
+  }
+  #wheel {
+    width: 300px;
+    height: 300px;
+    border: 10px solid #ccc;
+    border-radius: 50%;
+    background: conic-gradient(
+      #FFDDC1 0deg 72deg,
+      #FFABAB 72deg 144deg,
+      #FFC3A0 144deg 216deg,
+      #D5AAFF 216deg 288deg,
+      #85E3FF 288deg 360deg
+    );
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    transform: rotate(0deg);
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+  .question-box {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: #333;
+    word-break: break-word;
+    padding: 5px;
+    background: transparent;
+    transform-origin: center center;
+  }
+  #pointer {
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 30px solid #e53935;
+    margin: 10px auto;
+    filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.4));
+  }
+  #questionBox {
+    margin-top: 30px;
+    padding: 15px;
+    min-height: 60px;
+    border: none;
+    border-radius: 12px;
+    background: #ffffff;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  #startButton {
+    margin-top: 20px;
+    padding: 12px 24px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+  }
+  #startButton:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+  }
+</style>
+</head>
+<body>
+
+<div id="info">
+  <p><strong>主辦：</strong>澳門明愛　　<strong>贊助：</strong>社會工作局</p>
+  <p>掌握新生活 - 智能手機應用推廣活動</p>
+  <p>（手機互動遊戲構想）</p>
+</div>
+
+<h2>智能手機知多少？</h2>
+<div id="pointer"></div>
+<div id="wheel-container">
+  <div id="wheel">
+    <div class="question-box" style="top:35px; left:120px;">手機通訊應用程式有哪些？</div>
+    <div class="question-box" style="top:100px; left:215px;">『我的健康』2.0應用程式作用是甚麼？</div>
+    <div class="question-box" style="top:210px; left:190px;">『一戶通』應用程式作用是甚麼？</div>
+    <div class="question-box" style="top:210px; left:40px;">手機支付應用程式有哪些？</div>
+    <div class="question-box" style="top:100px; left:5px;">WiFi 是甚麼？</div>
+  </div>
+</div>
+<div id="questionBox">按開始轉動輪盤！</div>
+<button id="startButton">開始</button>
+
+<script>
+const questions = [
+  "手機通訊應用程式有哪些？",
+  "『我的健康』2.0應用程式作用是甚麼？",
+  "『一戶通』應用程式作用是甚麼？",
+  "手機支付應用程式有哪些？",
+  "WiFi 是甚麼？"
+];
+
+const wheel = document.getElementById('wheel');
+
+let spinning = false;
+let currentRotation = 0;
+
+document.getElementById('startButton').addEventListener('click', () => {
+  if (spinning) return;
+  spinning = true;
+
+  const extraRotation = 3600 + Math.floor(Math.random() * 360);
+  currentRotation += extraRotation;
+  wheel.style.transition = 'transform 3s ease-out';
+  wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+  setTimeout(() => {
+    const actualRotation = (currentRotation % 360);
+    const segmentIndex = Math.floor((360 - actualRotation + 36) % 360 / 72);
+    document.getElementById('questionBox').innerText = questions[segmentIndex];
+    spinning = false;
+  }, 3000);
+});
+</script>
+
+</body>
+</html>

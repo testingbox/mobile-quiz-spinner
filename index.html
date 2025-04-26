@@ -57,15 +57,16 @@
     padding: 5px;
     background: transparent;
     transform-origin: center center;
+    transition: box-shadow 0.3s ease;
   }
-  #pointer {
-    width: 0;
-    height: 0;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-top: 30px solid #e53935;
-    margin: 10px auto;
-    filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.4));
+  .highlight {
+    box-shadow: 0 0 12px 4px yellow;
+    background: rgba(255, 255, 0, 0.2);
+    animation: flash 1s infinite alternate;
+  }
+  @keyframes flash {
+    from { box-shadow: 0 0 10px 4px yellow; }
+    to { box-shadow: 0 0 20px 8px orange; }
   }
   #questionBox {
     margin-top: 30px;
@@ -106,14 +107,13 @@
 </div>
 
 <h2>智能手機知多少？</h2>
-<div id="pointer"></div>
 <div id="wheel-container">
   <div id="wheel">
-    <div class="question-box" style="top:35px; left:120px;">手機通訊應用程式有哪些？</div>
-    <div class="question-box" style="top:100px; left:215px;">『我的健康』2.0應用程式作用是甚麼？</div>
-    <div class="question-box" style="top:210px; left:190px;">『一戶通』應用程式作用是甚麼？</div>
-    <div class="question-box" style="top:210px; left:40px;">手機支付應用程式有哪些？</div>
-    <div class="question-box" style="top:100px; left:5px;">WiFi 是甚麼？</div>
+    <div class="question-box" style="top:30px; left:50px;">手機通訊應用程式有哪些？</div>
+    <div class="question-box" style="top:30px; left:160px;">『我的健康』2.0應用程式作用是甚麼？</div>
+    <div class="question-box" style="top:130px; left:190px;">『一戶通』應用程式作用是甚麼？</div>
+    <div class="question-box" style="top:190px; left:110px;">手機支付應用程式有哪些？</div>
+    <div class="question-box" style="top:130px; left:30px;">WiFi 是甚麼？</div>
   </div>
 </div>
 <div id="questionBox">按開始轉動輪盤！</div>
@@ -128,26 +128,33 @@ const questions = [
   "WiFi 是甚麼？"
 ];
 
-const wheel = document.getElementById('wheel');
-
+const boxes = document.querySelectorAll('.question-box');
 let spinning = false;
-let currentRotation = 0;
+let interval;
+
+function clearHighlights() {
+  boxes.forEach(b => b.classList.remove('highlight'));
+}
 
 document.getElementById('startButton').addEventListener('click', () => {
   if (spinning) return;
   spinning = true;
+  clearHighlights();
 
-  const extraRotation = 3600 + Math.floor(Math.random() * 360);
-  currentRotation += extraRotation;
-  wheel.style.transition = 'transform 3s ease-out';
-  wheel.style.transform = `rotate(${currentRotation}deg)`;
+  interval = setInterval(() => {
+    clearHighlights();
+    const randomIndex = Math.floor(Math.random() * boxes.length);
+    boxes[randomIndex].classList.add('highlight');
+  }, 100);
 
   setTimeout(() => {
-    const actualRotation = (currentRotation % 360);
-    const segmentIndex = Math.floor((360 - actualRotation + 36) % 360 / 72);
-    document.getElementById('questionBox').innerText = questions[segmentIndex];
+    clearInterval(interval);
+    const finalIndex = Math.floor(Math.random() * boxes.length);
+    clearHighlights();
+    boxes[finalIndex].classList.add('highlight');
+    document.getElementById('questionBox').innerText = questions[finalIndex];
     spinning = false;
-  }, 3000);
+  }, 2500);
 });
 </script>
 
